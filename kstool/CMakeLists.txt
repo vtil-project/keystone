@@ -16,4 +16,6 @@ endif()
 
 target_link_libraries(kstool keystone)
 
-install(TARGETS kstool DESTINATION bin)
+if (KEYSTONE_INSTALL)
+  install(TARGETS kstool DESTINATION bin)
+endif ()
