@@ -8,6 +8,7 @@ set(KEYSTONE_VERSION_MAJOR 0)
 set(KEYSTONE_VERSION_MINOR 9)
 
 option(KEYSTONE_BUILD_STATIC_RUNTIME "Embed static runtime" ON)
+option(KEYSTONE_INSTALL "Generate install target" ON)
 option(BUILD_LIBS_ONLY "Only build keystone library" 0)
 
 if (NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
@@ -104,18 +105,21 @@ CONFIGURE_FILE(
     "${CMAKE_CURRENT_SOURCE_DIR}/pkg-config.pc.cmake"
     "${PKG_CONFIG_FILE_PATH}"
 )
-INSTALL(FILES "${PKG_CONFIG_FILE_PATH}"
-        DESTINATION lib${LLVM_LIBDIR_SUFFIX}/pkgconfig)
 
-# uninstall target
-configure_file(
-    "${CMAKE_CURRENT_SOURCE_DIR}/CMakeUninstall.in"
-    "${CMAKE_CURRENT_BINARY_DIR}/CMakeUninstall.cmake"
-    IMMEDIATE @ONLY)
+if(KEYSTONE_INSTALL)
+  INSTALL(FILES "${PKG_CONFIG_FILE_PATH}"
+          DESTINATION lib${LLVM_LIBDIR_SUFFIX}/pkgconfig)
 
-if(NOT BUILD_LIBS_ONLY)
-    add_custom_target(uninstall
-        COMMAND ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_BINARY_DIR}/CMakeUninstall.cmake)
+  # uninstall target
+  configure_file(
+      "${CMAKE_CURRENT_SOURCE_DIR}/CMakeUninstall.in"
+      "${CMAKE_CURRENT_BINARY_DIR}/CMakeUninstall.cmake"
+      IMMEDIATE @ONLY)
+
+  if(NOT BUILD_LIBS_ONLY)
+      add_custom_target(uninstall
+          COMMAND ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_BINARY_DIR}/CMakeUninstall.cmake)
+  endif()
 endif()
 
 if(NOT BUILD_LIBS_ONLY)

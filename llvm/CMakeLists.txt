@@ -543,6 +543,8 @@ add_subdirectory(keystone)
 
 add_subdirectory(cmake/modules)
 
-install(DIRECTORY ../include/keystone
-DESTINATION include
-)
+if (KEYSTONE_INSTALL)
+  install(DIRECTORY ../include/keystone
+  DESTINATION include
+  )
+endif ()

@@ -43,7 +43,9 @@ add_library(keystone
   EVMMapping.cpp
 )
 
-install(TARGETS keystone DESTINATION lib${LLVM_LIBDIR_SUFFIX})
+if (KEYSTONE_INSTALL)
+  install(TARGETS keystone DESTINATION lib${LLVM_LIBDIR_SUFFIX})
+endif ()
 
 set_target_properties(
   keystone
